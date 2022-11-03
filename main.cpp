@@ -156,9 +156,9 @@ int main() {
     glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices),&cubeVertices,GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)0);
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,6*sizeof(float),(void*)0);
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)(3*sizeof(float)));
+    glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,6*sizeof(float),(void*)(3*sizeof(float)));
 
     unsigned int skyboxVAO, skyboxVBO;
     glGenVertexArrays(1, &skyboxVAO);
@@ -182,7 +182,6 @@ int main() {
     unsigned int skyBoxTexture= loadCubemap(faces);
 
     cubeShader.use();
-    cubeShader.setInt("texture1",0);
 
     skyShader.use();
     skyShader.setInt("texture1",0);
@@ -208,10 +207,10 @@ int main() {
         cubeShader.setMat4fv("model", model);
         cubeShader.setMat4fv("view", view);
         cubeShader.setMat4fv("projection", projection);
-
+        cubeShader.setVec3("cameraPos",camera.Position);
         glBindVertexArray(cubeVAO);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, cubeTexture);
+        glBindTexture(GL_TEXTURE_CUBE_MAP,skyBoxTexture );
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
 
